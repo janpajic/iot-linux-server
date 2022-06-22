@@ -1,0 +1,66 @@
+---
+
+- name: Install mosquitto, mosquitto-clients
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - mosquitto
+      - mosquitto-clients
+
+- name: Install redis
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - redis-server
+
+- name: Install postgresql
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - postgresql
+
+# TODO Try to replace with the Ansible module
+
+- name: Setup repository key
+  become: yes
+  ansible.builtin.command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1CE2AFD36DBCCA00
+
+- name: Add ChirpStack repository to system list
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb https://artifacts.chirpstack.io/packages/3.x/deb stable main"
+    update_cache: yes
+
+- name: Install chirpstack-gateway-bridge
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - chirpstack-gateway-bridge
+
+- name: Install chirpstack-network-server
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - chirpstack-network-server
+
+- name: Install chirpstack-application-server
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - chirpstack-application-server
+
+- name: Add Node.js APT key
+  become: yes
+  ansible.builtin.apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: Add Node.js 12 to APT
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb https://deb.nodesource.com/node_12.x {{ ansible_distribution_release }} main"
+    update_cache: yes
+
+- name: Install Node.js
+  become: yes
+  ansible.builtin.apt:
+    name: nodejs

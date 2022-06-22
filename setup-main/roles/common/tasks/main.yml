@@ -1,0 +1,52 @@
+---
+
+# TODO: Sort list alphabetically
+
+- name: Install apt-transport-https
+  become: yes
+  ansible.builtin.apt:
+    name: apt-transport-https
+
+- name: Install net-tools
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - net-tools
+
+- name: Install build-essential
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - build-essential
+
+- name: Install mc
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - mc
+
+- name: Install python3
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - python3
+      - python3-pip
+
+- name: Upgrade pip
+  become: yes
+  ansible.builtin.pip:
+    executable: pip3
+    name: pip
+    state: latest
+
+- name: Install i2c-tools
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - i2c-tools
+
+- name: Install openvpn
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+      - openvpn

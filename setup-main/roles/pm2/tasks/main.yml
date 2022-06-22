@@ -1,0 +1,17 @@
+---
+
+- name: Install pm2
+  become: yes
+  community.general.npm:
+    name: pm2
+    global: yes
+    unsafe_perm: yes
+
+# TODO Fix dynamic variant
+
+# - name: Enable pm2 on startup
+#   ansible.builtin.shell: "echo '{{ password }}' | sudo -S -c \"$(pm2 startup | tail -n1)\""
+
+- name: Enable pm2 on startup
+  become: yes
+  ansible.builtin.command: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ember --hp /home/ember

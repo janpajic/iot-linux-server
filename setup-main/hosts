@@ -1,0 +1,8 @@
+[all:vars]
+ip_address={{ inventory_hostname.split('@')[1] }}
+chirpstack_url=http://{{ ip_address }}:8080
+timezone=Europe/Prague
+username=ember
+password={{ ansible_ssh_pass }}
+
+[all]

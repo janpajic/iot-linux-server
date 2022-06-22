@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  roles:
+    - system
+    - common
+    - ember
+    - chirpstack
+    - node-red
+    - pm2
+    - network
