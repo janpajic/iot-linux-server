@@ -127,29 +127,25 @@ Do MQTT konfiguračního souboru je nutné zadat port:'''
 sudo nano /etc/mosquitto/mosquitto.conf
 '''
 Dopište:
+	listener 1883 
+	allow_anonymous true 
+
 	
-'''
-listener 1883 
-allow_anonymous true 
-'''
-	
-	-Potvrďte stisknutím [Ctrl+X], stiskněte “Y” jako Yes a [ENTER].
+-Potvrďte stisknutím [Ctrl+X], stiskněte “Y” jako Yes a [ENTER].
 
 Restartujte brokera, aby se projevily vaše změny (s kontrolou stavu):
 
-'''
-sudo service mosquitto stop
-systemctl status mosquitto.service 
-sudo service mosquitto start -v
-'''
+	sudo service mosquitto stop
+	systemctl status mosquitto.service 
+	sudo service mosquitto start -v
 
 ### 8.4.5.3.	Kontrola a dodatečné povolení portů
 Kontrola a povolení portu 18
 
-'''
-netstat -ln
-srviceudo ufw allow 188
-'''
+
+	netstat -ln
+	srviceudo ufw allow 188
+
 
 ### 8.4.5.4.	Porty služeb po instalaci
 ChirpStack:	 8080
