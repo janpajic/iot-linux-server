@@ -127,13 +127,16 @@ Do MQTT konfiguračního souboru je nutné zadat port:'''
 sudo nano /etc/mosquitto/mosquitto.conf
 '''
 Dopište:
-	'''
+	
+'''
 listener 1883 
 allow_anonymous true 
 '''
+	
 	-Potvrďte stisknutím [Ctrl+X], stiskněte “Y” jako Yes a [ENTER].
 
 Restartujte brokera, aby se projevily vaše změny (s kontrolou stavu):
+
 '''
 sudo service mosquitto stop
 systemctl status mosquitto.service 
@@ -142,14 +145,16 @@ sudo service mosquitto start -v
 
 ### 8.4.5.3.	Kontrola a dodatečné povolení portů
 Kontrola a povolení portu 18
-	'''
+
+'''
 netstat -ln
 srviceudo ufw allow 188
 '''
+
 ### 8.4.5.4.	Porty služeb po instalaci
 ChirpStack:	 8080
-Node-Red:	 1880
-MQTT broker:	 1883
+Node-Red:	 1880 (admin:hardwario)
+MQTT broker:	 1883 (admin:hardwario)
 
 ### 8.4.5.5.	Ansible trouble shooting
 Pokud zpuštíte instlaci po druhé, třetí ... je nutné některé kroky v /home/ember/setup-main/install.yml # Zakomentovat (aby se při dalších instalacích neprováděly, protože jsou již plně vytvořeny a brání v úspěšném pokračování instalace). Nejčastěji se jedná o úlohu Node-Red a Chirpstark.
