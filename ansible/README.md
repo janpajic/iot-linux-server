@@ -46,15 +46,12 @@ Sudo netplan --debug apply
 
 
 # Zahájení instalace podle ansible-playbook:
-cd /home/sidat/setup-main/
+cd /home/sidat/ansible/
 ansible-playbook ember-connect.yml -i hosts --limit sidat --ask-become-pass
 
 # Pozn. Zadejte heslo "sidat"
 #Pokud error s key host cheking:
 export ANSIBLE_HOST_KEY_CHECKING=False
-
-
-
 
 # Přidat MQTT port:
 cd /etc/mosquitto/ 
@@ -84,4 +81,4 @@ Node-Red:	 1880 (admin:admin)
 MQTT broker:	 1883
 
 8.3.4.5.	Ansible trouble shooting
-Pokud zpuštíte instlaci po druhé, třetí ... je nutné některé kroky v /home/ember/setup-main/install.yml # Zakomentovat (aby se při dalších instalacích neprováděly, protože jsou již plně vytvořeny a brání v úspěšném pokračování instalace). Nejčastěji se jedná o úlohu Node-Red a Chirpstark.
+Pokud zpuštíte instlaci po druhé, třetí ... je nutné některé kroky v /home/ember/ansible/install.yml zakomentovat "#" (aby se při dalších instalacích neprováděly, protože jsou již plně vytvořeny a brání v úspěšném pokračování instalace). Nejčastěji se jedná o úlohu Node-Red a Chirpstark.
