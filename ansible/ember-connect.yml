@@ -1,0 +1,19 @@
+---
+- hosts: '{{ ansible_limit | default(omit) }}'
+  vars:
+    lora_band: EU868 # https://www.chirpstack.io/network-server/install/config/
+    node_red_has_password: false # TODO Make switch work in template
+    timezone: Europe/Prague
+    username: sidat
+    password: sidat
+    ip_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    chirpstack_url: "http://{{ ip_address }}:8080"
+
+  roles:
+    - role: system
+    - role: common
+    - role: node-js
+    - role: node-red
+    - role: chirpstack
+#   - role: wireguard
+#   - role: firewall

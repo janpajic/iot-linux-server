@@ -1,0 +1,13 @@
+[Interface]
+Address = 192.168.16.1/24
+SaveConfig = true
+ListenPort = 51820
+PrivateKey = {{ (wg_server_private.content | b64decode).split('\n')[0] }}
+
+[Peer]
+PublicKey = {{ (wg_gateway_publickey.content | b64decode).split('\n')[0] }}
+AllowedIPs = 192.168.16.10/32
+
+[Peer]
+PublicKey = {{ (wg_customer_publickey.content | b64decode).split('\n')[0] }}
+AllowedIPs = 192.168.16.100/32

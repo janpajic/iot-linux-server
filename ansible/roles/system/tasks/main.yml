@@ -1,0 +1,33 @@
+---
+
+- name: Update packages
+  become: yes
+  ansible.builtin.apt:
+    force_apt_get: yes
+    update_cache: yes
+
+- name: Upgrade packages
+  become: yes
+  ansible.builtin.apt:
+    force_apt_get: yes
+    upgrade: dist
+
+- name: Disable DNS check on SSH
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'UseDNS no'
+    regexp: '^\s*#?\s*UseDNS'
+
+- name: Enable TCP keep-alive on SSH
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'TCPKeepAlive yes'
+    regexp: '^\s*#?\s*TCPKeepAlive'
+
+- name: Restart SSH service
+  become: yes
+  ansible.builtin.service:
+    name: ssh
+    state: restarted

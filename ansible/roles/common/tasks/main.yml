@@ -1,0 +1,11 @@
+---
+
+- name: Install mc
+  become: yes
+  ansible.builtin.apt:
+    name: mc
+
+- name: Install apt-transport-https
+  become: yes
+  ansible.builtin.apt:
+    name: apt-transport-https

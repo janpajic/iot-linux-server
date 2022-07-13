@@ -1,0 +1,104 @@
+---
+
+- name: Install WireGuard
+  become: yes
+  ansible.builtin.apt:
+    name: wireguard
+
+- name: Create dir wg directory in home folder
+  ansible.builtin.file:
+    path: ~/wg
+    state: directory
+    mode: '700'
+
+- name: Create server and clients folders dir in ~/wg
+  ansible.builtin.file:
+    path: "~/wg/{{ item }}"
+    state: directory
+    mode: '700'
+  loop:
+    - customer
+    - gateway
+    - server
+
+- name: Generate private keys
+  ansible.builtin.shell:
+    cmd: wg genkey > privatekey
+    chdir: "~/wg/{{ item }}"
+  loop:
+    - customer
+    - gateway
+    - server
+
+- name: Generate public keys
+  ansible.builtin.shell:
+    cmd: wg pubkey < privatekey > publickey
+    chdir: "~/wg/{{ item }}"
+  loop:
+    - customer
+    - gateway
+    - server
+
+- name: Register server private key
+  ansible.builtin.slurp:
+    src: "~/wg/server/privatekey"
+  register: "wg_server_private"
+
+- name: Register gateway private key
+  ansible.builtin.slurp:
+    src: "~/wg/gateway/privatekey"
+  register: "wg_gateway_private"
+
+- name: Register customer private key
+  ansible.builtin.slurp:
+    src: "~/wg/customer/privatekey"
+  register: "wg_customer_private"
+
+- name: Register server public key
+  ansible.builtin.slurp:
+    src: "~/wg/server/publickey"
+  register: "wg_server_publickey"
+
+- name: Register gateway public key
+  ansible.builtin.slurp:
+    src: "~/wg/gateway/publickey"
+  register: "wg_gateway_publickey"
+
+- name: Register customer public key
+  ansible.builtin.slurp:
+    src: "~/wg/customer/publickey"
+  register: "wg_customer_publickey"
+
+- name: Copy WireGuard config
+  become: yes
+  ansible.builtin.template:
+    src: ember.conf.j2
+    dest: /etc/wireguard/ember.conf
+
+- name: WireGuard UP ember
+  become: yes
+  ansible.builtin.command: wg-quick up ember
+
+- name: Enable ember tunnel on boot
+  become: yes
+  ansible.builtin.systemd:
+    name: wg-quick@ember
+    enabled: yes
+
+- name: Copy WireGuard private keys
+  ansible.builtin.fetch:
+    src: "~/wg/{{ item }}/privatekey"
+    dest: "passwords/wg/{{ inventory_hostname }}/{{ item }}/privatekey"
+    flat: yes
+  loop:
+    - customer
+    - gateway
+
+- name: Copy WireGuard public keys
+  ansible.builtin.fetch:
+    src: "~/wg/{{ item }}/publickey"
+    dest: "passwords/wg/{{ inventory_hostname }}/{{ item }}/publickey"
+    flat: yes
+  loop:
+    - customer
+    - gateway

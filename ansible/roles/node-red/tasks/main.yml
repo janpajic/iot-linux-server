@@ -1,0 +1,39 @@
+---
+
+- name: Install Node-RED
+  become: yes
+  community.general.npm:
+    global: yes
+    name: node-red
+    unsafe_perm: yes
+
+- name: Create Node-RED directory
+  ansible.builtin.file:
+    owner: '{{ username }}'
+    path: ~/.node-red
+    state: directory
+
+- name: Generate password hash
+  ansible.builtin.shell:
+    cmd: 'echo "{{ password }}" | node-red admin hash-pw | sed -n -e "s/^Password: //p"'
+  no_log: yes
+  register: hash_pw_output
+  when: node_red_has_password
+
+- name: Apply file template
+  ansible.builtin.template:
+    dest: ~/.node-red/settings.js
+    src: settings.js.j2
+
+- name: Copy systemd Node-RED service
+  become: yes
+  ansible.builtin.template:
+    dest: /etc/systemd/system/node-red.service
+    src: node-red.service.j2
+
+- name: Enable Node-RED service
+  become: yes
+  ansible.builtin.service:
+    enabled: yes
+    name: node-red.service
+    state: started
