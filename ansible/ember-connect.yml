@@ -16,4 +16,4 @@
     - role: node-red
     - role: chirpstack
 #   - role: wireguard
-   - role: firewall
+    - role: firewall
