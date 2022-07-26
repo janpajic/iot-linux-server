@@ -2,33 +2,33 @@
 # Zkopírujte sourbor z M:\IoT\05 Ansible-playbook\ansible_22.04TLS.tar.gz do lokálního uložiště NS
 
 ## Kopůrování přes SSH:
-cd /home/sidat/
+'cd /home/sidat/
 scp <cesta k ember souboru na pc>\ember-ansible.tar.gz ember@<ip linux servra>:/home/ember/
-tar –xvzf ansible_22.04TLS.tar.gz –C /home/sidat/
+tar –xvzf ansible_22.04TLS.tar.gz –C /home/sidat/'
 
 ## Získání douborů z Gitu:
-cd /home/sidat/
+'cd /home/sidat/
 sudo apt install git
-git clone https://github.com/janpajic/iot-linux-server.git
+git clone https://github.com/janpajic/iot-linux-server.git'
 
 
 ### KONFIGURACE SERVERU
 ## Konfigurace statické IP adresy:
-Cd /etc/netplan/
+'Cd /etc/netplan/'
 # zadejte příkaz ¨ls¨, který vám zobrazí soubory ve složce /etc/netplan/. Zobrazený soubor upravte příkazem:
 Sudo nano <název souboru>.yaml
 
 # Otevře se něco soubor s přibližně stejným obsahem (tj. tvar dynamické IP):
-network: 
+'network: 
  ethernets:
   enp0s3:
   addresses: []
   dhcp4: true
- version: 2
+ version: 2'
 
 # Obsah konfiguračního souboru upravte do poboby:
 #Pozn. K odsazení řádku používejte [TAB].
-network: 
+'network: 
  version: 2
  ethernets: 
   enp0s3:
@@ -36,43 +36,44 @@ network:
    addresses: [192.168.YOUR.NET/SUB]  (např. 192.168.80.205/24)
    gateway4: 192.168.80.1
    nameservers:
-    addresses: [192.168.SI.DAT,192.168.SI.DAT]
+    addresses: [192.168.SI.DAT,192.168.SI.DAT]'
 
 # Potvrďte stisknutím [Ctrl+X], stiskněte “Y” jako Yes a [ENTER].
 # Vaši konfiguraci následně nastavíte pomocí příkazu:
-Sudo netplan apply
+'Sudo netplan apply'
 #Pokud budete mít nějaké potíže využijte příkazu:
 Sudo netplan --debug apply
 
-
+# Instalace ansible:
+'sudo apt install ansible'
+ 
 # Zahájení instalace podle ansible-playbook:
-cd /home/sidat/ansible/
-ansible-playbook ember-connect.yml -i hosts --limit sidat --ask-become-pass
+'cd /home/sidat/iot-linux-server/ansible/
+ansible-playbook ember-connect.yml -i hosts --limit sidat --ask-become-pass'
 
 # Pozn. Zadejte heslo "sidat"
 #Pokud error s key host cheking:
-export ANSIBLE_HOST_KEY_CHECKING=False
+'export ANSIBLE_HOST_KEY_CHECKING=False'
 
 # Přidat MQTT port:
-cd /etc/mosquitto/ 
-sudo nano mosquitto.conf 
+'sudo nano /etc/mosquitto/mosquitto.conf'
 
 # Dopsat do conf: 
-listener 1883 
-allow_anonymous true 
+'listener 1883 
+allow_anonymous true' 
 
 
 # Restart mosquito: 
-sudo service mosquitto stop 
+'sudo service mosquitto stop 
 systemctl status mosquitto.service  (pro kontrolu)
-sudo service mosquitto start -v 
+sudo service mosquitto start -v'
 
 
 # Kontrola a dodatečné povoleni portů: 
 netstat -lntu    # (pro kontrolu, konfigurace mosquitto může v některých případech uzavřít ostatní otevřené porty (8080 a 1880)
-sudo ufw allow 1883
+'sudo ufw allow 1883
 sudo ufw allow 8080
-sudo ufw allow 1880
+sudo ufw allow 1880'
 
 ### Porty služeb po instalaci:
 
